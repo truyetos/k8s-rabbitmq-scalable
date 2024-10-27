@@ -1,21 +1,31 @@
-apiVersion: v1
-kind: Pod
+apiVersion: batch/v1
+kind: CronJob
 metadata:
-  name: producer-pod
+  name: producer-cronjob
   labels:
     app: producer
 spec:
-  containers:
-  - name: producer
-    image: producer-service:1.0
-    env:
-    - name: URI
-      value: "amqp://guest:guest@localhost:5672/"
-    - name: EXCHANGE
-      value: "scalable"
-    - name: QUEUE
-      value: "scalable-queue"
-    - name: CONTINUOUS
-      value: "true"
-    - name: LIFETIME
-      value: "5s"
+  schedule: "*/5 * * * *" # This schedule runs the job every 5 minutes
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: producer
+        spec:
+          containers:
+          - name: producer
+            image: truyet/producer:1.0
+            imagePullPolicy: Always
+            env:
+            - name: URI
+              value: "amqp://demo:demo@single-node.rabbitmq:5672/"
+            - name: EXCHANGE
+              value: "scalable"
+            - name: QUEUE
+              value: "scalable-queue"
+            - name: CONTINUOUS
+              value: "true"
+            - name: LIFETIME
+              value: "120s"
+          restartPolicy: Never

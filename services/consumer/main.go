@@ -159,6 +159,7 @@ func NewConsumer(amqpURI, exchange, queueName, key, ctag string) (*Consumer, err
 
 func (c *Consumer) Consume(queue string) error {
 	Log.Printf("Queue bound to Exchange, starting Consume (consumer tag %q)", c.tag)
+	c.channel.Qos(10, 0, false)
 	for {
 		deliveries, err := c.channel.Consume(
 			queue,   // name
@@ -215,7 +216,7 @@ func handle(deliveries <-chan amqp.Delivery, done chan error) {
 				Log.Printf("delivery count %d", deliveryCount)
 			}
 		}
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 		if !autoAck {
 			d.Ack(false)
 		}

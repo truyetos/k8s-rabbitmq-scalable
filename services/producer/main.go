@@ -181,7 +181,7 @@ func publish(publishOkCh <-chan struct{}, confirmsCh chan<- *amqp.DeferredConfir
 		case <-confirmsDoneCh:
 			Log.Println("producer confirms sent all")
 			return
-		case <-time.After(time.Millisecond * 100):
+		case <-time.After(time.Millisecond * 50):
 			if continuous {
 				continue
 			} else {
