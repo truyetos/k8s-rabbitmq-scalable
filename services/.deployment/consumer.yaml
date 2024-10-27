@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-deployment
+  labels:
+    app: consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+      - name: consumer
+        image: consumer-service:1.0
+        env:
+        - name: URI
+          value: "amqp://guest:guest@localhost:5672/"
+        - name: EXCHANGE
+          value: "scalable"
+        - name: QUEUE
+          value: "scalable-queue"
+        - name: CONSUMER_TAG
+          value: "scalable-consumer"
+        - name: VERBOSE
+          value: "true"
+        - name: AUTO_ACK
+          value: "false"

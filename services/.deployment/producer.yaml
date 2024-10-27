@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: producer-pod
+  labels:
+    app: producer
+spec:
+  containers:
+  - name: producer
+    image: producer-service:1.0
+    env:
+    - name: URI
+      value: "amqp://guest:guest@localhost:5672/"
+    - name: EXCHANGE
+      value: "scalable"
+    - name: QUEUE
+      value: "scalable-queue"
+    - name: CONTINUOUS
+      value: "true"
+    - name: LIFETIME
+      value: "5s"
