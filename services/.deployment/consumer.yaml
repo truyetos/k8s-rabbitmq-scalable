@@ -69,7 +69,7 @@ spec:
     metadata:
       protocol: amqp
       queueName: scalable-queue
-      mode: QueueLength
+      mode: MessageRate
       value: "5"
     authenticationRef:
       name: keda-trigger-auth-rabbitmq-conn
